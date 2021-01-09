@@ -1,9 +1,9 @@
 # About
 This web version permit to user like or dislike another users.<br/><br/>
-<img src="https://raw.githubusercontent.com/DiegoVictor/omnistack-8/master/web/screenshots/dashboard.png" width="49%" />
-<img src="https://raw.githubusercontent.com/DiegoVictor/omnistack-8/master/web/screenshots/login.png" width="49%" />
-<img src="https://raw.githubusercontent.com/DiegoVictor/omnistack-8/master/web/screenshots/match.png" width="49%" />
-<img src="https://raw.githubusercontent.com/DiegoVictor/omnistack-8/master/web/screenshots/matches.png" width="49%" />
+<img src="https://raw.githubusercontent.com/DiegoVictor/tindev-web/master/screenshots/dashboard.png" width="49%" />
+<img src="https://raw.githubusercontent.com/DiegoVictor/tindev-web/master/screenshots/login.png" width="49%" />
+<img src="https://raw.githubusercontent.com/DiegoVictor/tindev-web/master/screenshots/match.png" width="49%" />
+<img src="https://raw.githubusercontent.com/DiegoVictor/tindev-web/master/screenshots/matches.png" width="49%" />
 
 # Install
 ```
