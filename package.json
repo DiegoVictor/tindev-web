@@ -80,7 +80,6 @@
     "jest-dom": "^4.0.0",
     "jest-localstorage-mock": "^2.4.0",
     "prettier": "^1.18.2",
-    "react-app-rewired": "^2.1.4",
-    "reactotron-react-js": "^3.3.6"
+    "react-app-rewired": "^2.1.4"
   }
 }
