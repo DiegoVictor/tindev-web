@@ -1,4 +1,4 @@
-import React, { useEffect, useState, useContext } from 'react';
+import { toast } from 'react-toastify';
 
 import Like from '~/assets/like.png';
 import Dislike from '~/assets/dislike.png';
@@ -20,12 +20,18 @@ export default () => {
 
   useEffect(() => {
     (async () => {
-      const { data } = await api.get('/developers');
+      try {
+        const { data } = await api.get('/developers');
 
-      setDevelopers(data);
-      setPreloading(true);
+        setDevelopers(data);
+        setPreloading(true);
+      } catch (err) {
+        toast.error(
+          'Ops! Não foi possivel carregar os desenvolvedores, tente recarregar a página!'
+        );
+      }
     })();
-  }, [token]);
+  }, []);
 
   useEffect(() => {
     disconnect();
@@ -36,9 +42,15 @@ export default () => {
   }, [id]);
 
   async function handleLike (devId) {
-    await api.post(`/developers/${devId}/like`);
-    setDevelopers(developers.filter(dev => dev._id !== dev_id));
-  }
+    try {
+      await api.post(`/developers/${devId}/like`);
+      setDevelopers(developers.filter(({ _id }) => _id !== devId));
+    } catch (err) {
+      toast.error(
+        'Ops! Não foi possivel dar like neste desenvolvedor, tente novamente!'
+      );
+    }
+  };
 
   async function handleDislike(dev_id) {
     await api.post(
@@ -49,9 +61,15 @@ export default () => {
       }
     );
   async function handleDislike (devId) {
-    await api.post(`/developers/${devId}/dislike`);
-    setDevelopers(developers.filter(({ _id }) => _id !== devId));
-  }
+      try {
+        await api.post(`/developers/${devId}/dislike`);
+        setDevelopers(developers.filter(({ _id }) => _id !== devId));
+      } catch (err) {
+        toast.error(
+          'Ops! Não foi possivel dar dislike neste desenvolvedor, tente novamente!'
+        );
+      }
+  };
 
   return (
     <Layout>

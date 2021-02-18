@@ -1,4 +1,5 @@
 import React, { useEffect, useState, useContext } from 'react';
+import { toast } from 'react-toastify';
 
 import { UserContext } from '~/contexts/User';
 import api from '~/services/api';
@@ -23,10 +24,16 @@ export default () => {
 
   useEffect(() => {
     (async () => {
-      const { data } = await api.get('matches');
-      setMatches(data);
+      try {
+        const { data } = await api.get('matches');
+        setMatches(data);
+      } catch (error) {
+        toast.error(
+          'Ops! Não foi possivel carregar os seus matches, tente recarregar a página!'
+        );
+      }
     })();
-  }, [id, token]);
+  }, [id]);
 
   return (
     <Layout>

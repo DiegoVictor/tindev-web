@@ -12,19 +12,23 @@ export default () => {
   const user = useContext(UserContext);
   const handleSubmit = useCallback(
     async ({ username }) => {
-      const { data } = await api.post('developers', { username });
+      try {
+        const { data } = await api.post('developers', { username });
 
-      localStorage.setItem(
-        'tindev_user',
-        JSON.stringify({
-          token: data.token,
-          id: data.developer._id,
-        })
-      );
-      user.id = data.developer._id;
-      user.token = data.token;
+        localStorage.setItem(
+          'tindev_user',
+          JSON.stringify({
+            token: data.token,
+            id: data.developer._id,
+          })
+        );
+        user.id = data.developer._id;
+        user.token = data.token;
 
-      history.push('/developers');
+        history.push('/developers');
+      } catch (err) {
+        toast.error('Ops! Não foi possivel fazer seu login, tente novamente!');
+      }
     },
     [user.id, user.token]
   );
