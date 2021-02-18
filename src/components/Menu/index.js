@@ -9,7 +9,7 @@ import { Container, Nav, Href, Profile } from './styles';
 
 export default function Menu({ active }) {
   const user = useContext(UserContext);
-  const { id, token } = useMemo(() => user, [user]);
+  const { id } = useMemo(() => user, [user]);
   const [me, setMe] = useState(null);
 
   const handleLogout = () => {
@@ -21,12 +21,10 @@ export default function Menu({ active }) {
 
   useEffect(() => {
     (async () => {
-      const { data } = await api.get(`/developers/${id}`, {
-        headers: { Authorization: `Bearer ${token}` },
-      });
+      const { data } = await api.get(`/developers/${id}`);
       setMe(data);
     })();
-  }, [id, token]);
+  }, [id]);
 
   return (
     <>

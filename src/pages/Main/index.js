@@ -16,13 +16,11 @@ export default () => {
   const [developer, setDeveloper] = useState(null);
   const [preload, setPreloading] = useState(false);
 
-  const { id, token } = useContext(UserContext);
+  const { id } = useContext(UserContext);
 
   useEffect(() => {
     (async () => {
-      const { data } = await api.get('/developers', {
-        headers: { Authorization: `Bearer ${token}` },
-      });
+      const { data } = await api.get('/developers');
 
       setDevelopers(data);
       setPreloading(true);
@@ -37,14 +35,8 @@ export default () => {
     });
   }, [id]);
 
-  async function handleLike(dev_id) {
-    await api.post(
-      `/developers/${dev_id}/like`,
-      {},
-      {
-        headers: { Authorization: `Bearer ${token}` },
-      }
-    );
+  async function handleLike (devId) {
+    await api.post(`/developers/${devId}/like`);
     setDevelopers(developers.filter(dev => dev._id !== dev_id));
   }
 
@@ -56,7 +48,9 @@ export default () => {
         headers: { Authorization: `Bearer ${token}` },
       }
     );
-    setDevelopers(developers.filter(dev => dev._id !== dev_id));
+  async function handleDislike (devId) {
+    await api.post(`/developers/${devId}/dislike`);
+    setDevelopers(developers.filter(({ _id }) => _id !== devId));
   }
 
   return (

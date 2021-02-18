@@ -11,7 +11,7 @@ import Layout from '~/components/Layout';
 export default () => {
   const [developer, setDeveloper] = useState(null);
   const [matches, setMatches] = useState([]);
-  const { id, token } = useContext(UserContext);
+  const { id } = useContext(UserContext);
 
   useEffect(() => {
     disconnect();
@@ -23,9 +23,7 @@ export default () => {
 
   useEffect(() => {
     (async () => {
-      const { data } = await api.get('matches', {
-        headers: { Authorization: `Bearer ${token}` },
-      });
+      const { data } = await api.get('matches');
       setMatches(data);
     })();
   }, [id, token]);
