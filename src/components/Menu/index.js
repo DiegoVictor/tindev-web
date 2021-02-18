@@ -1,4 +1,10 @@
-import React, { useEffect, useState, useContext, useMemo } from 'react';
+import React, {
+  useEffect,
+  useState,
+  useContext,
+  useMemo,
+  useCallback,
+} from 'react';
 import PropTypes from 'prop-types';
 
 import Logo from '~/assets/logo.svg';
@@ -12,12 +18,12 @@ export default function Menu({ active }) {
   const { id } = useMemo(() => user, [user]);
   const [me, setMe] = useState(null);
 
-  const handleLogout = () => {
+  const handleLogout = useCallback(() => {
     localStorage.removeItem('tindev_user');
     delete user.id;
     delete user.token;
     history.push('/');
-  };
+  }, [user]);
 
   useEffect(() => {
     (async () => {
