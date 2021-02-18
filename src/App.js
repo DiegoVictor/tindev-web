@@ -1,5 +1,9 @@
 import React from 'react';
-import { Container } from '~/styles/theme';
+import Theme, { Container } from '~/styles/theme';
 export default () => {
-  return <Container />;
+  return (
+    <Container>
+      <Theme />
+    </Container>
+  );
 };
