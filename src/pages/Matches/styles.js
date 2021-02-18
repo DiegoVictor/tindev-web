@@ -1,12 +1,5 @@
 import styled from 'styled-components';
 
-// export const Container = styled.div`
-//   margin: auto;
-//   max-width: 980px;
-//   padding: 50px 0px;
-//   text-align: center;
-// `;
-
 export const Developers = styled.div`
   display: grid;
   grid-gap: 15px;
