@@ -1,6 +1,6 @@
 import styled, { keyframes } from 'styled-components';
 
-const lds_roller = keyframes`
+const ldsRoller = keyframes`
   0% {
     transform: rotate(0deg);
   }
@@ -17,7 +17,7 @@ export const Container = styled.div`
 `;
 
 export const Dot = styled.div`
-  animation: ${lds_roller} 1.2s cubic-bezier(0.5, 0, 0.5, 1) infinite;
+  animation: ${ldsRoller} 1.2s cubic-bezier(0.5, 0, 0.5, 1) infinite;
   transform-origin: 32px 32px;
 
   &:after {
