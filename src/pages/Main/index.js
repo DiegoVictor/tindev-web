@@ -6,7 +6,6 @@ import Dislike from '~/assets/dislike.png';
 import { UserContext } from '~/contexts/User';
 import api from '~/services/api';
 import { connect, subscribe, disconnect } from '~/services/socket';
-import Layout from '~/components/Layout';
 import Loading from '~/components/Loading';
 import Match from '~/components/Match';
 import Menu from '~/components/Menu';
@@ -71,7 +70,7 @@ export default () => {
   );
 
   return (
-    <Layout>
+    <>
       <Menu active="developers" />
 
       {developers.length > 0 ? (
@@ -112,6 +111,6 @@ export default () => {
       )}
 
       {developer && <Match developer={developer} setDeveloper={setDeveloper} />}
-    </Layout>
+    </>
   );
 };

@@ -7,7 +7,6 @@ import { connect, subscribe, disconnect } from '~/services/socket';
 import Match from '~/components/Match';
 import Menu from '~/components/Menu';
 import { Developers, Developer, Avatar, Description, Bio } from './styles';
-import Layout from '~/components/Layout';
 
 export default () => {
   const [developer, setDeveloper] = useState(null);
@@ -36,7 +35,7 @@ export default () => {
   }, [id]);
 
   return (
-    <Layout>
+    <>
       <Menu active="matches" />
 
       <Developers>
@@ -52,6 +51,6 @@ export default () => {
       </Developers>
 
       {developer && <Match developer={developer} setDeveloper={setDeveloper} />}
-    </Layout>
+    </>
   );
 };

@@ -6,7 +6,6 @@ import { UserContext } from '~/contexts/User';
 import api from '~/services/api';
 import history from '~/services/history';
 import { Container, Button } from './styles';
-import Layout from '~/components/Layout';
 
 export default () => {
   const user = useContext(UserContext);
@@ -34,7 +33,7 @@ export default () => {
   );
 
   return (
-    <Layout>
+    <>
       <Container>
         <Form onSubmit={handleSubmit}>
           <img src={Logo} alt="Tindev" />
@@ -49,6 +48,6 @@ export default () => {
           </Button>
         </Form>
       </Container>
-    </Layout>
+    </>
   );
 };
