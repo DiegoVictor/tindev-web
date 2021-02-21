@@ -3,19 +3,20 @@ import { render, act } from '@testing-library/react';
 import { Router } from 'react-router-dom';
 import MockAdapter from 'axios-mock-adapter';
 import faker from 'faker';
+import { toast } from 'react-toastify';
 
 import { UserContext } from '~/contexts/User';
-import { emit } from '../../../__mocks__/socket.io-client';
+import { emit } from '../../mocks/socket.io-client';
 import api from '~/services/api';
 import history from '~/services/history';
-import factory from '../../utils/factories';
+import factory from '../utils/factory';
 import Matches from '~/pages/Matches';
 
-const api_mock = new MockAdapter(api);
-const id = faker.random.number();
-const token = faker.random.uuid();
-
 describe('Matches', () => {
+  const id = faker.random.number();
+  const token = faker.random.uuid();
+  const apiMock = new MockAdapter(api);
+
   beforeEach(async () => {
     await act(async () => {
       localStorage.setItem('tindev_user', JSON.stringify({ id, token }));
@@ -28,7 +29,7 @@ describe('Matches', () => {
 
     let getByTestId;
 
-    api_mock
+    apiMock
       .onGet(`/developers/${id}`)
       .reply(200, developer)
       .onGet('/matches')
@@ -51,14 +52,39 @@ describe('Matches', () => {
     });
   });
 
+  it('should not be able to see a list of matches with network error', async () => {
+    const developer = await factory.attrs('Developer');
+    const error = jest.spyOn(toast, 'error');
+
+    apiMock
+      .onGet(`/developers/${id}`)
+      .reply(200, developer)
+      .onGet('/matches')
+      .reply(400);
+
+    await act(async () => {
+      render(
+        <UserContext.Provider value={{ id, token }}>
+          <Router history={history}>
+            <Matches />
+          </Router>
+        </UserContext.Provider>
+      );
+    });
+
+    expect(error).toHaveBeenCalledWith(
+      'Ops! Não foi possivel carregar os seus matches, tente recarregar a página!'
+    );
+  });
+
   it('should be able to show a match', async () => {
-    const match_developer = await factory.attrs('Developer');
+    const matchDeveloper = await factory.attrs('Developer');
     const developers = await factory.attrsMany('Developer', 3);
 
     let getByAltText;
     let getByText;
 
-    api_mock.onGet('/developers').reply(200, developers);
+    apiMock.onGet('/developers').reply(200, developers);
 
     await act(async () => {
       const components = render(
@@ -73,15 +99,15 @@ describe('Matches', () => {
     });
 
     await act(async () => {
-      emit(match_developer);
+      emit(matchDeveloper);
     });
 
-    expect(getByAltText(match_developer.name)).toHaveProperty(
+    expect(getByAltText(matchDeveloper.name)).toHaveProperty(
       'src',
-      match_developer.avatar
+      matchDeveloper.avatar
     );
     expect(getByAltText("It's a Match")).toBeInTheDocument();
-    expect(getByText(match_developer.name)).toBeInTheDocument();
-    expect(getByText(match_developer.bio)).toBeInTheDocument();
+    expect(getByText(matchDeveloper.name)).toBeInTheDocument();
+    expect(getByText(matchDeveloper.bio)).toBeInTheDocument();
   });
 });
