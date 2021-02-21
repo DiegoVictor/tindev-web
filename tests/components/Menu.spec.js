@@ -8,28 +8,27 @@ import { UserContext } from '~/contexts/User';
 import api from '~/services/api';
 import history from '~/services/history';
 import Menu from '~/components/Menu';
-
-const api_mock = new MockAdapter(api);
-const id = faker.random.number();
-const token = faker.random.uuid();
-const developer = {
-  avatar: faker.image.imageUrl(),
-  name: faker.name.findName(),
-};
-
-api_mock.onGet(`/developers/${id}`).reply(200, developer);
+import factory from '../utils/factory';
 
 jest.mock('~/services/history');
 
 describe('Menu', () => {
+  const id = faker.random.number();
+  const token = faker.random.uuid();
+  const apiMock = new MockAdapter(api);
+
   beforeAll(() => {
     localStorage.setItem('tindev_user', JSON.stringify({ id, token }));
   });
 
   it('should be able to see the menu', async () => {
+    const { avatar, name } = await factory.attrs('Developer');
+
     let getByText;
     let getByAltText;
     let getByTestId;
+
+    apiMock.onGet(`/developers/${id}`).reply(200, { name, avatar });
 
     await act(async () => {
       const component = render(
@@ -47,16 +46,15 @@ describe('Menu', () => {
     expect(getByText('developers')).toBeInTheDocument();
     expect(getByText('matches')).toBeInTheDocument();
     expect(getByTestId('logout')).toBeInTheDocument();
-    expect(getByAltText(developer.name)).toHaveProperty(
-      'src',
-      developer.avatar
-    );
+    expect(getByAltText(name)).toHaveProperty('src', avatar);
   });
 
   it('should be able to logout', async () => {
+    const developer = await factory.attrs('Developer');
     let getByTestId;
 
     history.push.mockImplementation(jest.fn());
+    apiMock.onGet(`/developers/${id}`).reply(200, developer);
 
     await act(async () => {
       const component = render(
