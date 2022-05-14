@@ -1,6 +1,6 @@
 import React from 'react';
 import { render, fireEvent, act } from '@testing-library/react';
-import faker from 'faker';
+import faker from '@faker-js/faker';
 import MockAdapter from 'axios-mock-adapter';
 import { toast } from 'react-toastify';
 
@@ -21,8 +21,8 @@ describe('Login', () => {
   it('should be able to login', async () => {
     const user = {};
     const username = faker.internet.userName();
-    const id = faker.random.number();
-    const token = faker.random.uuid();
+    const id = faker.datatype.number();
+    const token = faker.datatype.uuid();
 
     apiMock
       .onPost('developers', { username })

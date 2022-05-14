@@ -2,7 +2,7 @@ import React from 'react';
 import { render, act } from '@testing-library/react';
 import { Router } from 'react-router-dom';
 import MockAdapter from 'axios-mock-adapter';
-import faker from 'faker';
+import faker from '@faker-js/faker';
 import { toast } from 'react-toastify';
 
 import { UserContext } from '~/contexts/User';
@@ -13,8 +13,8 @@ import factory from '../utils/factory';
 import Matches from '~/pages/Matches';
 
 describe('Matches', () => {
-  const id = faker.random.number();
-  const token = faker.random.uuid();
+  const id = faker.datatype.number();
+  const token = faker.datatype.uuid();
   const apiMock = new MockAdapter(api);
 
   beforeEach(async () => {

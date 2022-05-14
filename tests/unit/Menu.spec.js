@@ -1,6 +1,6 @@
 import React from 'react';
 import { render, fireEvent, act } from '@testing-library/react';
-import faker from 'faker';
+import faker from '@faker-js/faker';
 import MockAdapter from 'axios-mock-adapter';
 import { Router } from 'react-router-dom';
 
@@ -13,8 +13,8 @@ import factory from '../utils/factory';
 jest.mock('~/services/history');
 
 describe('Menu', () => {
-  const id = faker.random.number();
-  const token = faker.random.uuid();
+  const id = faker.datatype.number();
+  const token = faker.datatype.uuid();
   const apiMock = new MockAdapter(api);
 
   beforeAll(() => {

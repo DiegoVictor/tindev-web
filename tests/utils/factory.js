@@ -1,11 +1,11 @@
 import { factory } from 'factory-girl';
-import faker from 'faker';
+import faker from '@faker-js/faker';
 
 factory.define(
   'Developer',
   {},
   {
-    _id: faker.random.uuid,
+    _id: faker.datatype.uuid,
     name: faker.name.firstName,
     bio: faker.lorem.paragraph,
     avatar: faker.image.imageUrl,
