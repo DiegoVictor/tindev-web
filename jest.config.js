@@ -6,7 +6,7 @@ module.exports = {
   // automock: false,
 
   // Stop running tests after `n` failures
-  bail: 1,
+  // bail: 0,
 
   // Respect "browser" field in package.json when resolving modules
   // browser: false,
@@ -83,7 +83,10 @@ module.exports = {
   // ],
 
   // A map from regular expressions to module names that allow to stub out resources with a single module
-  moduleNameMapper: { '^~/(.*)': '<rootDir>/src/$1' },
+  moduleNameMapper: {
+    '\\.(svg|png)$': '<rootDir>/tests/mocks/file.js',
+    '^~/(.*)': '<rootDir>/src/$1',
+  },
 
   // An array of regexp pattern strings, matched against all module paths before considered 'visible' to the module loader
   // modulePathIgnorePatterns: [],
