@@ -1,7 +1,7 @@
 import React from 'react';
 import { render, act, fireEvent } from '@testing-library/react';
 import { Router } from 'react-router-dom';
-import faker from '@faker-js/faker';
+import { faker } from '@faker-js/faker';
 import MockAdapter from 'axios-mock-adapter';
 import { toast } from 'react-toastify';
 
@@ -13,8 +13,8 @@ import factory from '../utils/factory';
 import Main from '~/pages/Main';
 
 describe('Main', () => {
-  const id = faker.datatype.number();
-  const token = faker.datatype.uuid();
+  const id = faker.number.int();
+  const token = faker.string.uuid();
   const apiMock = new MockAdapter(api);
 
   beforeAll(async () => {

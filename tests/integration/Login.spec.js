@@ -1,6 +1,6 @@
 import React from 'react';
 import { render, fireEvent, act } from '@testing-library/react';
-import faker from '@faker-js/faker';
+import { faker } from '@faker-js/faker';
 import MockAdapter from 'axios-mock-adapter';
 import { toast } from 'react-toastify';
 
@@ -20,9 +20,9 @@ describe('Login', () => {
 
   it('should be able to login', async () => {
     const user = {};
-    const username = faker.internet.userName();
-    const id = faker.datatype.number();
-    const token = faker.datatype.uuid();
+    const username = faker.internet.username();
+    const id = faker.number.int();
+    const token = faker.string.uuid();
 
     apiMock
       .onPost('developers', { username })
@@ -58,7 +58,7 @@ describe('Login', () => {
 
   it('should not be able to login with networ error', async () => {
     const user = {};
-    const username = faker.internet.userName();
+    const username = faker.internet.username();
     const error = jest.spyOn(toast, 'error');
 
     apiMock.onPost('developers', { username }).reply(400);
