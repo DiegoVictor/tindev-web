@@ -11,18 +11,16 @@ import Login from '~/pages/Login';
 
 jest.mock('~/services/history');
 
+const apiMock = new MockAdapter(api);
+
 describe('Login', () => {
-  const apiMock = new MockAdapter(api);
-
-  beforeEach(() => {
-    localStorage.clear();
-  });
-
   it('should be able to login', async () => {
     const user = {};
     const username = faker.internet.username();
     const id = faker.number.int();
     const token = faker.string.uuid();
+
+    localStorage.clear();
 
     apiMock
       .onPost('developers', { username })
@@ -60,6 +58,8 @@ describe('Login', () => {
     const user = {};
     const username = faker.internet.username();
     const error = jest.spyOn(toast, 'error');
+
+    localStorage.clear();
 
     apiMock.onPost('developers', { username }).reply(400);
     history.push.mockImplementation(jest.fn());

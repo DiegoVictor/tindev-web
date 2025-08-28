@@ -15,8 +15,6 @@ jest.mock('~/services/history');
 const apiMock = new MockAdapter(api);
 
 describe('Menu', () => {
-  beforeAll(() => {});
-
   it('should be able to see the menu', async () => {
     const { avatar, name } = await factory.attrs('Developer');
 
