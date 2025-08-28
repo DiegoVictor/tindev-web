@@ -12,17 +12,18 @@ import factory from '../utils/factory';
 
 jest.mock('~/services/history');
 
-describe('Menu', () => {
-  const id = faker.number.int();
-  const token = faker.string.uuid();
-  const apiMock = new MockAdapter(api);
+const apiMock = new MockAdapter(api);
 
-  beforeAll(() => {
-    localStorage.setItem('tindev_user', JSON.stringify({ id, token }));
-  });
+describe('Menu', () => {
+  beforeAll(() => {});
 
   it('should be able to see the menu', async () => {
     const { avatar, name } = await factory.attrs('Developer');
+
+    const id = faker.number.int();
+    const token = faker.string.uuid();
+
+    localStorage.setItem('tindev_user', JSON.stringify({ id, token }));
 
     let getByText;
     let getByAltText;
@@ -51,6 +52,12 @@ describe('Menu', () => {
 
   it('should be able to logout', async () => {
     const developer = await factory.attrs('Developer');
+
+    const id = faker.number.int();
+    const token = faker.string.uuid();
+
+    localStorage.setItem('tindev_user', JSON.stringify({ id, token }));
+
     let getByTestId;
 
     history.push.mockImplementation(jest.fn());
