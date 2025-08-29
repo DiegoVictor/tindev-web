@@ -12,21 +12,23 @@ import history from '~/services/history';
 import factory from '../utils/factory';
 import Main from '~/pages/Main';
 
+const apiMock = new MockAdapter(api);
+
 describe('Main', () => {
-  const id = faker.number.int();
-  const token = faker.string.uuid();
-  const apiMock = new MockAdapter(api);
-
-  beforeAll(async () => {
-    const developer = await factory.attrs('Developer');
-
-    localStorage.setItem('tindev_user', JSON.stringify({ id, token }));
-    apiMock.onGet(`/developers/${id}`).reply(200, developer);
-  });
-
   it('should be able to see a list of developers', async () => {
     const developers = await factory.attrsMany('Developer', 3);
-    apiMock.onGet('/developers').reply(200, developers);
+    const developer = await factory.attrs('Developer');
+
+    const id = faker.number.int();
+    const token = faker.string.uuid();
+
+    apiMock
+      .onGet(`/developers/${id}`)
+      .reply(200, developer)
+      .onGet('/developers')
+      .reply(200, developers);
+
+    localStorage.setItem('tindev_user', JSON.stringify({ id, token }));
 
     let getByTestId;
     let getByAltText;
@@ -45,7 +47,7 @@ describe('Main', () => {
       getByText = component.getByText;
     });
 
-    developers.forEach(dev => {
+    developers.forEach((dev) => {
       expect(getByTestId(`developer_${dev._id}`)).toBeInTheDocument();
       expect(getByAltText(dev.name)).toHaveProperty('src', dev.avatar);
       expect(getByText(dev.name)).toBeInTheDocument();
@@ -54,7 +56,18 @@ describe('Main', () => {
   });
 
   it('should not be able to see a list of developers suggested', async () => {
-    apiMock.onGet('/developers').reply(200, []);
+    const developer = await factory.attrs('Developer');
+
+    const id = faker.number.int();
+    const token = faker.string.uuid();
+
+    apiMock
+      .onGet(`/developers/${id}`)
+      .reply(200, developer)
+      .onGet('/developers')
+      .reply(200, []);
+
+    localStorage.setItem('tindev_user', JSON.stringify({ id, token }));
 
     let getByText;
 
@@ -73,10 +86,20 @@ describe('Main', () => {
   });
 
   it('should not be able to see a list of developers with network error', async () => {
-    const error = jest.spyOn(toast, 'error');
-
+    const developer = await factory.attrs('Developer');
     await factory.attrsMany('Developer', 3);
-    apiMock.onGet('/developers').reply(400);
+
+    const id = faker.number.int();
+    const token = faker.string.uuid();
+
+    apiMock
+      .onGet(`/developers/${id}`)
+      .reply(200, developer)
+      .onGet('/developers')
+      .reply(400);
+
+    localStorage.setItem('tindev_user', JSON.stringify({ id, token }));
+    const error = jest.spyOn(toast, 'error');
 
     await act(async () => {
       render(
@@ -95,11 +118,19 @@ describe('Main', () => {
 
   it('should be able to like a developer', async () => {
     const [developer, ...rest] = await factory.attrsMany('Developer', 3);
+
+    const id = faker.number.int();
+    const token = faker.string.uuid();
+
     apiMock
+      .onGet(`/developers/${id}`)
+      .reply(200, await factory.attrs('Developer'))
       .onGet('/developers')
       .reply(200, [developer, ...rest])
       .onPost(`/developers/${developer._id}/like`)
       .reply(200);
+
+    localStorage.setItem('tindev_user', JSON.stringify({ id, token }));
 
     let getByTestId;
     let queryByTestId;
@@ -127,16 +158,24 @@ describe('Main', () => {
 
   it('should not be able to like a developer with network error', async () => {
     const [developer, ...rest] = await factory.attrsMany('Developer', 3);
-    const error = jest.spyOn(toast, 'error');
+
+    const id = faker.number.int();
+    const token = faker.string.uuid();
 
     apiMock
+      .onGet(`/developers/${id}`)
+      .reply(200, await factory.attrs('Developer'))
       .onGet('/developers')
       .reply(200, [developer, ...rest])
       .onPost(`/developers/${developer._id}/like`)
       .reply(400);
 
+    localStorage.setItem('tindev_user', JSON.stringify({ id, token }));
+
     let getByTestId;
     let queryByTestId;
+
+    const error = jest.spyOn(toast, 'error');
 
     await act(async () => {
       const component = render(
@@ -164,11 +203,19 @@ describe('Main', () => {
 
   it('should be able to dislike a developer', async () => {
     const [developer, ...rest] = await factory.attrsMany('Developer', 3);
+
+    const id = faker.number.int();
+    const token = faker.string.uuid();
+
     apiMock
+      .onGet(`/developers/${id}`)
+      .reply(200, await factory.attrs('Developer'))
       .onGet('/developers')
       .reply(200, [developer, ...rest])
       .onPost(`/developers/${developer._id}/dislike`)
       .reply(200);
+
+    localStorage.setItem('tindev_user', JSON.stringify({ id, token }));
 
     let getByTestId;
     let queryByTestId;
@@ -196,16 +243,24 @@ describe('Main', () => {
 
   it('should not be able to dislike a developer with network error', async () => {
     const [developer, ...rest] = await factory.attrsMany('Developer', 3);
-    const error = jest.spyOn(toast, 'error');
+
+    const id = faker.number.int();
+    const token = faker.string.uuid();
 
     apiMock
+      .onGet(`/developers/${id}`)
+      .reply(200, await factory.attrs('Developer'))
       .onGet('/developers')
       .reply(200, [developer, ...rest])
       .onPost(`/developers/${developer._id}/dislike`)
       .reply(400);
 
+    localStorage.setItem('tindev_user', JSON.stringify({ id, token }));
+
     let getByTestId;
     let queryByTestId;
+
+    const error = jest.spyOn(toast, 'error');
 
     await act(async () => {
       const component = render(
@@ -234,10 +289,20 @@ describe('Main', () => {
   it('should be able to show a match', async () => {
     const match_developer = await factory.attrs('Developer');
     const developers = await factory.attrsMany('Developer', 3);
+
+    const id = faker.number.int();
+    const token = faker.string.uuid();
+
+    apiMock
+      .onGet(`/developers/${id}`)
+      .reply(200, await factory.attrs('Developer'))
+      .onGet('/developers')
+      .reply(200, developers);
+
+    localStorage.setItem('tindev_user', JSON.stringify({ id, token }));
+
     let getByAltText;
     let getByText;
-
-    apiMock.onGet('/developers').reply(200, developers);
 
     await act(async () => {
       const components = render(
