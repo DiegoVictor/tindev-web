@@ -12,28 +12,27 @@ import history from '~/services/history';
 import factory from '../utils/factory';
 import Matches from '~/pages/Matches';
 
+const apiMock = new MockAdapter(api);
+
 describe('Matches', () => {
-  const id = faker.number.int();
-  const token = faker.string.uuid();
-  const apiMock = new MockAdapter(api);
-
-  beforeEach(async () => {
-    await act(async () => {
-      localStorage.setItem('tindev_user', JSON.stringify({ id, token }));
-    });
-  });
-
   it('should be able to see a list of matches', async () => {
     const matches = await factory.attrsMany('Developer', 3);
     const developer = await factory.attrs('Developer');
 
-    let getByTestId;
+    const id = faker.number.int();
+    const token = faker.string.uuid();
+
+    await act(async () => {
+      localStorage.setItem('tindev_user', JSON.stringify({ id, token }));
+    });
 
     apiMock
       .onGet(`/developers/${id}`)
       .reply(200, developer)
       .onGet('/matches')
       .reply(200, matches);
+
+    let getByTestId;
 
     await act(async () => {
       const component = render(
@@ -47,20 +46,28 @@ describe('Matches', () => {
       getByTestId = component.getByTestId;
     });
 
-    matches.forEach(dev => {
+    matches.forEach((dev) => {
       expect(getByTestId(`developer_${dev._id}`)).toBeInTheDocument();
     });
   });
 
   it('should not be able to see a list of matches with network error', async () => {
     const developer = await factory.attrs('Developer');
-    const error = jest.spyOn(toast, 'error');
+
+    const id = faker.number.int();
+    const token = faker.string.uuid();
+
+    await act(async () => {
+      localStorage.setItem('tindev_user', JSON.stringify({ id, token }));
+    });
 
     apiMock
       .onGet(`/developers/${id}`)
       .reply(200, developer)
       .onGet('/matches')
       .reply(400);
+
+    const error = jest.spyOn(toast, 'error');
 
     await act(async () => {
       render(
@@ -80,11 +87,23 @@ describe('Matches', () => {
   it('should be able to show a match', async () => {
     const matchDeveloper = await factory.attrs('Developer');
     const developers = await factory.attrsMany('Developer', 3);
+    const developer = await factory.attrs('Developer');
+
+    const id = faker.number.int();
+    const token = faker.string.uuid();
+
+    await act(async () => {
+      localStorage.setItem('tindev_user', JSON.stringify({ id, token }));
+    });
+
+    apiMock
+      .onGet(`/developers/${id}`)
+      .reply(200, developer)
+      .onGet('/developers')
+      .reply(200, developers);
 
     let getByAltText;
     let getByText;
-
-    apiMock.onGet('/developers').reply(200, developers);
 
     await act(async () => {
       const components = render(
